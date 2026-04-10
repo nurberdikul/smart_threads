@@ -9,10 +9,9 @@ class CommentsCubit extends Cubit<CommentsState> {
 
   CommentsCubit(this._repository, this._postId) : super(const CommentsState());
 
-  //load comments
+  // load comments
   Future<void> loadComments() async {
     emit(state.copyWith(status: CommentsStatus.loading));
-
     try {
       final comments = await _repository.getComments(_postId);
       emit(state.copyWith(comment: comments, status: CommentsStatus.success));
@@ -26,7 +25,12 @@ class CommentsCubit extends Cubit<CommentsState> {
     }
   }
 
-  //addComment
+  // input changed — вызывается из CommentInput при каждом символе
+  void onInputChanged(String value) {
+    emit(state.copyWith(inputText: value));
+  }
+
+  // addComment
   Future<void> addComment() async {
     if (!state.canSubmit) return;
 
@@ -40,7 +44,6 @@ class CommentsCubit extends Cubit<CommentsState> {
 
     try {
       await _repository.addComment(comment);
-
       emit(
         state.copyWith(
           inputText: '',
@@ -52,6 +55,4 @@ class CommentsCubit extends Cubit<CommentsState> {
       await loadComments();
     }
   }
-
-  //input changed
 }

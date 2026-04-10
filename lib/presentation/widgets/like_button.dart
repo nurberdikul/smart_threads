@@ -40,7 +40,7 @@ class _LikeButtonState extends State<LikeButton>
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async {
-        print('click');
+        debugPrint('click');
         await _controller.forward();
         await _controller.reverse();
 
